@@ -9,8 +9,11 @@ export default {
             store.addToCart(code)
         },
         async removeDBBook(id){
-            await store.removeDBBook(id);
-            store.fetchBooks();
+            if(confirm('Desea eliminar el libro con id: ' + id)){
+                await store.removeDBBook(id);
+                store.fetchBooks();
+            }
+            
         }
     }
 }
