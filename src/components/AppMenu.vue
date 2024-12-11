@@ -4,9 +4,11 @@
 <template>
     <nav>
       <ul>
-        <li><a href='#list'>Ver Libros</a></li>
-        <li><a href='#form'>AñadirLibro</a></li>
-        <li><a href='#Aderca de...'>Acerca de</a></li>
+        <li><router-link to="/">Libros</router-link></li>
+        <li><router-link to="/create">Nuevo Libro</router-link></li>
+        <li><router-link to="/cart">Ver Carrito</router-link></li>
+        <li><router-link to="/messages">Ver Mensajes</router-link></li>
+        <li><router-link to="/about">Acerca de</router-link></li>
       </ul>
     </nav>
 </template>

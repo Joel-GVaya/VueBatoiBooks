@@ -22,8 +22,6 @@ export default {
 
 <template>
     <div id="list" class="list">
-        <div>
             <book-item v-for="book in books" :key="book.id ":book="book"></book-item>
-        </div>
     </div>
 </template>

@@ -38,6 +38,7 @@ export default {
       const result = await store.addDBBook(newBook);
       store.addMessage('Libro con añadido correctamente')
       const form = document.getElementById('bookForm');
+      this.$router.push('/')
       form.reset();
       store.fetchBooks()
     } catch (error) {

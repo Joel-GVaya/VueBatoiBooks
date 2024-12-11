@@ -22,8 +22,8 @@ export const store = {
         
     },
 
-    delFromCart(code){
-        const index = this.state.cart.indexOf(code)
+    delFromCart(book){
+        const index = this.state.cart.indexOf(book)
         this.state.cart.splice(index, 1)
     },
 

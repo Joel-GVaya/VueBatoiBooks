@@ -1,28 +1,20 @@
 <script setup>
 import batoiLogo from '../public/logoBatoi.png';
 import AppMenu from './components/AppMenu.vue';
-import AppMessages from './components/AppMessages.vue';
-import BooksList from './components/BooksList.vue';
-import AddBook from './components/AddBook.vue';
-import AboutView from './components/AboutView.vue';
-import AppCart from './components/AppCart.vue';
+import AppFooter from './components/AppFooter.vue';
+
 
 </script>
 
 <template>
-  <div>
+  <div class="principal">
     <a href="https://vitejs.dev" target=' blank'>
       <!--<img src="${batoiLogo}" class="logo" alt="Batoi logo" />-->
     </a>
     <h1>BatoiBooks</h1>
     <app-menu></app-menu>
-    <div class="scroll">
-      <app-messages></app-messages>
-      <app-cart></app-cart>
-      <books-list></books-list>
-      <add-book></add-book>
-    </div>
-    <about-view></about-view>
+    <router-view></router-view>
+    <app-footer></app-footer>
   </div>
 </template>
 

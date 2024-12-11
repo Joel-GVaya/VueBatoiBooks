@@ -126,13 +126,19 @@
     margin: 0;
   }
   
-  .card{
+  .card {
     background-color: #505050;
-    padding: 10px;
-    margin-bottom: 20px;
+    margin-top: 15px;
     width: 600px;
-    align-content: center;
-  }
+    display: flex;
+    flex-direction: column; /* Asegura que los elementos se apilen verticalmente */
+    align-items: center; /* Centra horizontalmente el contenido */
+    justify-content: center; /* Centra verticalmente el contenido */
+    padding: 20px; /* Añade algo de espacio interno para que no esté tan ajustado */
+    border-radius: 8px; /* Añade esquinas redondeadas para un mejor diseño */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Añade sombra para resaltar la tarjeta */
+}
+
   
   .mensajes{
     background-color: 505050;
@@ -161,4 +167,11 @@
 
   .list{
     justify-content: center;
+    align-content: center;
+  }
+
+  .principal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
