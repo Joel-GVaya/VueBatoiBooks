@@ -1,27 +1,14 @@
 <script>
 import { store } from '@/stores/store';
+import AddBook from './AddBook.vue';
 
 export default {
     props: ['book'],
 
-    methods: {
-        addCart(book) {
-            store.addToCart(book)
-        },
-        async removeDBBook(id) {
-            if (confirm('Desea eliminar el libro con id: ' + id)) {
-                await store.removeDBBook(id);
-                store.fetchBooks();
-            }
-
-        }
-    }
 }
 </script>
 
 <template>
-    <div>
-
         <div class="card">
             <h3>{{ book.moduleCode }} ({{ book.id }})</h3>
             <h4>{{ book.publisher }}</h4>
@@ -30,18 +17,7 @@ export default {
             <p>{{ book.status === 'sold' ? `Vendido el ${book.solddate}` : 'En venta' }}</p>
             <p>{{ book.comments }}</p>
             <h4>{{ parseFloat(book.price).toFixed(2) }}€</h4>
-            <div>
-                <button class="carrito" @click="addCart(book)">
-                    <span class="material-icons">add_shopping_cart</span>
-                </button>
-                <button class="editar">
-                    <span class="material-icons">edit</span>
-                </button>
-                <button class="delete" @click="removeDBBook(book.id)">
-                    <span class="material-icons">delete</span>
-                </button>
-            </div>
+            <slot></slot>
 
         </div>
-    </div>
 </template>

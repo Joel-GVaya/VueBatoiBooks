@@ -2140,21 +2140,12 @@
     },
     {
       "id": "336f",
-      "moduleCode": "0045",
+      "module": "",
       "publisher": "aa",
       "price": 1,
       "pages": 2,
       "status": "new",
-      "comments": ""
-    },
-    {
-      "id": "e808",
-      "module": "Autonomia personal i salut infantil",
-      "publisher": "Joel Garcia",
-      "price": 43,
-      "pages": 34,
-      "status": "good",
-      "comments": "wasd"
+      "comments": "ReEdited"
     }
   ]
 }

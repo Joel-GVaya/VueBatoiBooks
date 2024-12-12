@@ -1,10 +1,17 @@
 <script>
 import ModulesList from './ModulesList.vue';
-import BooksList from './BooksList.vue';
 import { store } from '@/stores/store'
 export default {
+  props: ['id'],
+
   components: {
     ModulesList,
+  },
+
+  data() {
+    return {
+      book: null,
+    };
   },
   computed: {
     modules() {
@@ -13,52 +20,88 @@ export default {
   },
   async mounted() {
     await store.fetchModules();
+
+    if (this.id) {
+      this.book = await store.fetchBook(this.id);
+      if (this.book) {
+        this.fillForm(this.book);
+      }
+    } else {
+      document.querySelector('.id-camp').classList.add('id');
+    }
   },
   methods: {
-  async handleSubmit(event) {
-    event.preventDefault();
+    fillForm(book) {
+      document.getElementById('book-id').value = book.id;
+      document.getElementById('id-module').value = book.module;
+      document.getElementById('publisher').value = book.publisher;
+      document.getElementById('price').value = book.price;
+      document.getElementById('pages').value = book.pages;
+      document.querySelector(`input[name="status"][value="${book.status}"]`).checked = true;
+      document.getElementById('comments').value = book.comments;
+    },
 
-    const moduleCode = document.getElementById('id-module').value;
-    const publisher = document.getElementById('publisher').value;
-    const price = parseFloat(document.getElementById('price').value);
-    const pages = parseInt(document.getElementById('pages').value, 10);
-    const status = document.querySelector('input[name="status"]:checked')?.value;
-    const comments = document.getElementById('comments').value;
+    async handleSubmit(event) {
+      event.preventDefault();
 
-    const newBook = {
-      module: moduleCode,
-      publisher: publisher,
-      price: price,
-      pages: pages,
-      status: status,
-      comments: comments
-    };
+      const moduleCode = document.getElementById('id-module').value;
+      const publisher = document.getElementById('publisher').value;
+      const price = parseFloat(document.getElementById('price').value);
+      const pages = parseInt(document.getElementById('pages').value, 10);
+      const status = document.querySelector('input[name="status"]:checked')?.value;
+      const comments = document.getElementById('comments').value;
+      if (this.book) {
+        const id = document.getElementById('book-id').value;
+        const newBook = {
+          id: id,
+          module: moduleCode,
+          publisher: publisher,
+          price: price,
+          pages: pages,
+          status: status,
+          comments: comments
+        };
+        const result = await store.changeDBBook(newBook)
+        store.addMessage('Libro editado correctamente')
+      } else {
+        const newBook = {
+          module: moduleCode,
+          publisher: publisher,
+          price: price,
+          pages: pages,
+          status: status,
+          comments: comments
+        };
 
-    try {
-      const result = await store.addDBBook(newBook);
-      store.addMessage('Libro con añadido correctamente')
+        try {
+          const result = await store.addDBBook(newBook);
+          store.addMessage('Libro con añadido correctamente')
+        } catch (error) {
+          store.addMessage(error)
+        }
+      }
       const form = document.getElementById('bookForm');
       this.$router.push('/')
       form.reset();
       store.fetchBooks()
-    } catch (error) {
-      store.addMessage(error)
     }
   }
-}
 
 };
 </script>
 
 <template>
   <div id='form'>
+
     <form id="bookForm" @submit="handleSubmit" novalidate>
       <legend>
         <h3 class="action">AñadirLibro</h3>
       </legend>
-      <div class='id'>
+
+      <div class="id-camp">
         <label for="id">ID:</label>
-        <input type="text" id="book-id" disabled>
+        <input type="text" id="book-id" :value="book?.id || ''" readonly>
+
       </div>
       <div>
         <label for="id-module">Módulo:</label>

@@ -27,6 +27,12 @@ const router = createRouter({
       component: AddBook,
     },
     {
+      path: '/edit/:id',
+      name: 'edit',
+      component: AddBook,
+      props: true,
+    },
+    {
       path: '/cart',
       name: 'cart',
       component: AppCart,

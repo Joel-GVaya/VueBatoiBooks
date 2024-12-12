@@ -47,7 +47,7 @@ export const store = {
 
     async fetchBook(id) {
         try {
-            const response = await axios.get(`${API_URL}/${id}`);
+            const response = await axios.get(`${API_URL}books/${id}`);
             return response.data; 
         } catch (error) {
             this.addMessage(`Error al obtener el libro con ID ${id}:`, error);
@@ -81,6 +81,16 @@ export const store = {
             throw error;
         }
     },
+
+    async changeDBBook(updatedBook){
+        try {
+            const response = await axios.put(`${API_URL}books/${updatedBook.id}`, updatedBook);
+            return response.data;
+        } catch (error) {
+            console.error('Error al modificar el libro:', error);
+            throw error;
+        }
+    },
 };
 
 
@@ -98,17 +108,9 @@ export const removeDBBook = async (id) => {
     }
 };
 
-/*export const changeDBBook = async (updatedBook) => {
-    try {
-        const response = await axios.put(`${API_URL}/${updatedBook.id}`, updatedBook);
-        return response.data;
-    } catch (error) {
-        console.error('Error al modificar el libro:', error);
-        throw error;
-    }
-};
 
-export const getModuleUsed = async (userId, moduleCode) => {
+
+/*export const getModuleUsed = async (userId, moduleCode) => {
     try {
         const response = await axios.get(`${API_URL}?userId=${userId}&moduleCode=${moduleCode}`);
         return response.data.length > 0;
