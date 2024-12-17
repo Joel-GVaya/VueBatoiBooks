@@ -1,6 +1,8 @@
 <script>
 import { store } from '@/stores/store'
 import BookItem from './BookItem.vue';
+import { useMessagesStore } from '@/stores/store';
+import { mapActions } from 'pinia';
 export default {
         components: {
         BookItem,
@@ -11,8 +13,10 @@ export default {
         }
     },
     methods: {
+        ...mapActions(useMessagesStore, ['addMessage']),
         delFromCart(book){
             store.delFromCart(book)
+            this.addMessage('Se ha eliminado el libro ' + book.id + ' del carrito correctamente')
         }
     }
     

@@ -1,5 +1,7 @@
 <script>
 import ModulesList from './ModulesList.vue';
+import { useMessagesStore } from '@/stores/store';
+import { mapState, mapActions } from 'pinia';
 import { store } from '@/stores/store'
 export default {
   props: ['id'],
@@ -31,6 +33,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(useMessagesStore, ['addMessage']),
     fillForm(book) {
       document.getElementById('book-id').value = book.id;
       document.getElementById('id-module').value = book.module;
@@ -62,7 +65,7 @@ export default {
           comments: comments
         };
         const result = await store.changeDBBook(newBook)
-        store.addMessage('Libro editado correctamente')
+        this.addMessage('Libro editado correctamente')
       } else {
         const newBook = {
           module: moduleCode,
@@ -75,9 +78,9 @@ export default {
 
         try {
           const result = await store.addDBBook(newBook);
-          store.addMessage('Libro con añadido correctamente')
+          this.addMessage('Libro con añadido correctamente')
         } catch (error) {
-          store.addMessage(error)
+          this.addMessage(error)
         }
       }
       const form = document.getElementById('bookForm');

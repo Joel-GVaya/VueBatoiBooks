@@ -1,6 +1,8 @@
 <script>
 import { store } from '@/stores/store';
 import BookItem from '@/components/BookItem.vue';
+import { useMessagesStore } from '@/stores/store';
+import { mapState, mapActions } from 'pinia';
 
 export default {
     name: 'BookList',
@@ -17,6 +19,7 @@ export default {
     },
 
     methods: {
+        ...mapActions(useMessagesStore, ['addMessage']),
         addCart(book) {
             store.addToCart(book)
         },

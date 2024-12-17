@@ -1,13 +1,38 @@
 import axios from 'axios';
 import { reactive } from 'vue';
+import { defineStore, mapActions } from 'pinia';
 
 const API_URL = 'http://localhost:3000/';
 
+export const useMessagesStore = defineStore('messages',  {
+    state() {
+        return {
+            messages: [],
+        }
+    },
+
+    actions: {
+
+        addMessage(message){
+            this.messages.push(message)
+        },
+    
+        delMessage(index){
+            this.messages.splice(index, 1);
+        
+        },
+
+    }
+})
+
 export const store = {
+    methods: {
+        ...mapActions(useMessagesStore, ['addMessage'])
+    },
+
     state: reactive({
         books: [],
         modules: [],
-        messages:[],
         cart:[],
     }),
 
@@ -27,14 +52,7 @@ export const store = {
         this.state.cart.splice(index, 1)
     },
 
-    addMessage(message){
-        this.state.messages.push(message)
-    },
-
-    delMessage(index){
-        this.state.messages.splice(index, 1);
     
-    },
 
     async fetchBooks() {
         try {
