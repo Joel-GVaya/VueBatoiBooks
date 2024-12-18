@@ -6,5 +6,5 @@ export default {
 </script>
 
 <template>
-    <option>{{ module.vliteral }}</option>
+    <option :value="module.id">{{ module.vliteral }}</option>
 </template>

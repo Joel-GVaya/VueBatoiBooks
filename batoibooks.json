@@ -2127,25 +2127,22 @@
   ],
   "books": [
     {
-      "id": "8",
-      "userId": 1,
-      "moduleCode": "5252",
-      "publisher": "joel",
-      "price": "100",
-      "pages": "500",
-      "status": "new",
-      "comments": "Holaaa",
-      "soldDate": "",
-      "photo": ""
+      "id": "e6e9",
+      "moduleCode": "6c68",
+      "publisher": "Joel",
+      "price": 124,
+      "pages": 312,
+      "status": "good",
+      "comments": "asdasdas"
     },
     {
-      "id": "336f",
-      "module": "",
-      "publisher": "aa",
-      "price": 1,
-      "pages": 2,
+      "id": "9ee1",
+      "moduleCode": "7d24",
+      "publisher": "Bromera",
+      "price": 120,
+      "pages": 14312312312,
       "status": "new",
-      "comments": "ReEdited"
+      "comments": "Libro sobre las habilidades sociales"
     }
   ]
 }

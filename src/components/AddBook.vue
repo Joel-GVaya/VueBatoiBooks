@@ -1,6 +1,5 @@
 <script>
 import ModulesList from './ModulesList.vue';
-import { useMessagesStore } from '@/stores/store';
 import { mapState, mapActions } from 'pinia';
 import { store } from '@/stores/store'
 export default {
@@ -16,15 +15,13 @@ export default {
     };
   },
   computed: {
-    modules() {
-      return store.state.modules;
-    }
+      ...mapState(store, ['modules'])
   },
   async mounted() {
-    await store.fetchModules();
+    await this.fetchModules();
 
     if (this.id) {
-      this.book = await store.fetchBook(this.id);
+      this.book = await this.fetchBook(this.id);
       if (this.book) {
         this.fillForm(this.book);
       }
@@ -33,10 +30,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useMessagesStore, ['addMessage']),
+    ...mapActions(store, ['addMessage', 'fetchModules', 'fetchBook', 'changeDBBook', 'fetchBooks', 'addDBBook']),
     fillForm(book) {
       document.getElementById('book-id').value = book.id;
-      document.getElementById('id-module').value = book.module;
+      document.getElementById('id-module').value = book.moduleCode;
       document.getElementById('publisher').value = book.publisher;
       document.getElementById('price').value = book.price;
       document.getElementById('pages').value = book.pages;
@@ -57,18 +54,18 @@ export default {
         const id = document.getElementById('book-id').value;
         const newBook = {
           id: id,
-          module: moduleCode,
+          moduleCode: moduleCode,
           publisher: publisher,
           price: price,
           pages: pages,
           status: status,
           comments: comments
         };
-        const result = await store.changeDBBook(newBook)
+        const result = await this.changeDBBook(newBook)
         this.addMessage('Libro editado correctamente')
       } else {
         const newBook = {
-          module: moduleCode,
+          moduleCode: moduleCode,
           publisher: publisher,
           price: price,
           pages: pages,
@@ -77,7 +74,7 @@ export default {
         };
 
         try {
-          const result = await store.addDBBook(newBook);
+          const result = await this.addDBBook(newBook);
           this.addMessage('Libro con añadido correctamente')
         } catch (error) {
           this.addMessage(error)
@@ -86,7 +83,7 @@ export default {
       const form = document.getElementById('bookForm');
       this.$router.push('/')
       form.reset();
-      store.fetchBooks()
+      this.fetchBooks()
     }
   }
 
@@ -109,7 +106,7 @@ export default {
       <div>
         <label for="id-module">Módulo:</label>
         <select id="id-module" required>
-          <option>- Selecciona un módulo -</option>
+          <option v-if="!id">- Selecciona un módulo -</option>
           <modules-list v-for="module in modules" :module="module"></modules-list>
         </select>
         <span class='error'></span>

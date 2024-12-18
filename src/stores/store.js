@@ -1,17 +1,36 @@
 import axios from 'axios';
-import { reactive } from 'vue';
-import { defineStore, mapActions } from 'pinia';
+import { defineStore } from 'pinia';
 
 const API_URL = 'http://localhost:3000/';
 
-export const useMessagesStore = defineStore('messages',  {
+export const store = defineStore('messages',  {
     state() {
         return {
             messages: [],
+            books: [],
+            modules: [],
+            cart:[],
         }
     },
 
     actions: {
+        loadCartFromLocalStorage(){
+            const storedCart = localStorage.getItem('cart');
+            this.cart = storedCart ? JSON.parse(storedCart) : [];
+        },
+
+        getNumberProductsOnCart(){
+            return this.cart.length;
+        },
+
+        getTotalPriceOnCart() {
+            let total = 0;
+            this.cart.forEach(item => {
+                total += item.price;
+            });
+            return total;
+        },
+        
 
         addMessage(message){
             this.messages.push(message)
@@ -22,13 +41,101 @@ export const useMessagesStore = defineStore('messages',  {
         
         },
 
+        addToCart(code){
+            const index = this.cart.indexOf(code)
+            if(index !== -1){
+                this.addMessage('Ya has añadido ese libro al carrito')
+            }else{
+                this.cart.push(code)
+                localStorage.setItem('cart', JSON.stringify(this.cart))
+                this.addMessage('Libro añadido al carrito correctamente')
+            }
+            
+        },
+    
+        delFromCart(book){
+            const index = this.cart.indexOf(book)
+            this.cart.splice(index, 1)
+            localStorage.setItem('cart', JSON.stringify(this.cart))
+        },
+
+        delAllCart(){
+            this.cart = []
+        },
+    
+        
+        async fetchBooks() {
+            try {
+                const response = await axios.get(`${API_URL}books`);
+                this.books = response.data;
+            } catch (error) {
+                this.addMessage('Error al obtener libros:', error);
+            }
+        },
+    
+        async fetchBook(id) {
+            try {
+                const response = await axios.get(`${API_URL}books/${id}`);
+                return response.data; 
+            } catch (error) {
+                this.addMessage(`Error al obtener el libro con ID ${id}:`, error);
+            }
+        },
+    
+        async fetchModules() {
+            try {
+                const response = await axios.get(`${API_URL}modules`);
+                this.modules = response.data;
+            } catch (error) {
+                this.addMessage('Error al obtener libros:', error);
+            }
+        },
+    
+        async addDBBook(newBook){
+            try {
+                const response = await axios.post(`${API_URL}books`, newBook);
+                return response.data;
+            } catch (error) {
+                this.addMessage('Error al añadir el libro:', error);
+                throw error;
+            }
+        },
+    
+        async removeDBBook(id) {
+            try {
+                await axios.delete(`${API_URL}books/${id}`);
+            } catch (error) {
+                this.addMessage(`Error al eliminar el libro con ID ${id}:`, error);
+                throw error;
+            }
+        },
+    
+        async changeDBBook(updatedBook){
+            try {
+                const response = await axios.put(`${API_URL}books/${updatedBook.id}`, updatedBook);
+                return response.data;
+            } catch (error) {
+                console.error('Error al modificar el libro:', error);
+                throw error;
+            }
+        },
+
+        getModuleNameById(id) {
+            const module = this.modules.find(mod => mod.id === id);
+            if (module) {
+                return module.vliteral;
+            } else {
+                this.addMessage('No se encontró el módulo con ese ID');
+                return null;
+            }
+        }
+        
+
     }
 })
 
-export const store = {
-    methods: {
-        ...mapActions(useMessagesStore, ['addMessage'])
-    },
+/*export const store = {
+
 
     state: reactive({
         books: [],
@@ -117,7 +224,7 @@ export const store = {
 
 
 
-export const removeDBBook = async (id) => {
+/*export const removeDBBook = async (id) => {
     try {
         await axios.delete(`${API_URL}/${id}`);
     } catch (error) {
@@ -128,7 +235,7 @@ export const removeDBBook = async (id) => {
 
 
 
-/*export const getModuleUsed = async (userId, moduleCode) => {
+export const getModuleUsed = async (userId, moduleCode) => {
     try {
         const response = await axios.get(`${API_URL}?userId=${userId}&moduleCode=${moduleCode}`);
         return response.data.length > 0;

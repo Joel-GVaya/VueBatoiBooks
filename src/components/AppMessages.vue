@@ -1,12 +1,12 @@
 <script>
-import { useMessagesStore } from '@/stores/store';
+import { store } from '@/stores/store';
 import { mapState, mapActions } from 'pinia';
 export default {
     computed: {
-        ...mapState(useMessagesStore, ['messages'])
+        ...mapState(store, ['messages'])
     },
     methods: {
-        ...mapActions(useMessagesStore, ['delMessage'])
+        ...mapActions(store, ['delMessage'])
     },
 
 

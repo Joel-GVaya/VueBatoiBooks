@@ -1,16 +1,23 @@
 <script>
 import { store } from '@/stores/store';
 import AddBook from './AddBook.vue';
+import { mapActions } from 'pinia';
 
 export default {
     props: ['book'],
 
+    methods: {
+        ...mapActions(store, ['addMessage', 'getModuleNameById', 'fetchModules']),
+    }
+
+    
 }
 </script>
 
 <template>
         <div class="card">
-            <h3>{{ book.moduleCode }} ({{ book.id }})</h3>
+            <h3>ID - {{ book.id }}</h3>
+            <h4>Módulo - {{ this.getModuleNameById(book.moduleCode)  }}</h4>
             <h4>{{ book.publisher }}</h4>
             <p>{{ book.pages }} páginas</p>
             <p>Estado- {{ book.status }} </p>
