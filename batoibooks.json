@@ -2128,12 +2128,12 @@
   "books": [
     {
       "id": "e6e9",
-      "moduleCode": "6c68",
+      "moduleCode": "7d24",
       "publisher": "Joel",
-      "price": 124,
-      "pages": 312,
+      "price": 123,
+      "pages": 567,
       "status": "good",
-      "comments": "asdasdas"
+      "comments": "asdwa"
     },
     {
       "id": "9ee1",
@@ -2143,6 +2143,24 @@
       "pages": 14312312312,
       "status": "new",
       "comments": "Libro sobre las habilidades sociales"
+    },
+    {
+      "id": "4fbc",
+      "moduleCode": "5f8c",
+      "publisher": "Bromera",
+      "price": 12,
+      "pages": 321,
+      "status": "good",
+      "comments": "awq"
+    },
+    {
+      "id": "c83b",
+      "moduleCode": "1bcb",
+      "publisher": "<SDFBD",
+      "price": 324,
+      "pages": 42546,
+      "status": "good",
+      "comments": "ASfWEF"
     }
   ]
 }

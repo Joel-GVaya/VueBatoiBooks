@@ -15,7 +15,7 @@ export default {
     };
   },
   computed: {
-      ...mapState(store, ['modules'])
+    ...mapState(store, ['modules'])
   },
   async mounted() {
     await this.fetchModules();
@@ -84,6 +84,26 @@ export default {
       this.$router.push('/')
       form.reset();
       this.fetchBooks()
+    },
+
+    vaciarFormulario(book) {
+      document.querySelector('.id-camp').classList.add('id');
+      document.getElementById('book-id').value = '';
+      document.getElementById('id-module').value = '';
+      document.getElementById('publisher').value = '';
+      document.getElementById('price').value = '';
+      document.getElementById('pages').value = '';
+      document.querySelector(`input[name="status"][value="${book.status}"]`).checked = false;
+      document.getElementById('comments').value = '';
+
+    }
+  },
+
+  watch: {
+    '$route'(to, from) {
+      if(to.path === '/create'){
+        this.vaciarFormulario(this.book);
+      }
     }
   }
 
