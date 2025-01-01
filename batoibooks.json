@@ -2161,6 +2161,24 @@
       "pages": 42546,
       "status": "good",
       "comments": "ASfWEF"
+    },
+    {
+      "id": "b1dd",
+      "moduleCode": "5f8c",
+      "publisher": "dasda",
+      "price": 1231,
+      "pages": 424,
+      "status": "good",
+      "comments": "asdadw1qw"
+    },
+    {
+      "id": "00df",
+      "moduleCode": "5f8c",
+      "publisher": "JoelEdited",
+      "price": 12,
+      "pages": 23,
+      "status": "new",
+      "comments": "Prueba validacion Formulario"
     }
   ]
 }
