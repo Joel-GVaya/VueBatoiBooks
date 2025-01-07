@@ -3,6 +3,7 @@ import ModulesList from './ModulesList.vue';
 import { mapState, mapActions } from 'pinia';
 import { store } from '@/stores/store';
 import { Form, Field, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 export default {
   props: ['id'],
 
@@ -16,8 +17,32 @@ export default {
   data() {
     return {
       book: null,
-    };
 
+      mySchema: yup.object({
+        publisher: yup.string()
+          .required('Este campo es obligatorio')
+          .matches(/^[a-zA-ZÀ-ÿ\s]{2,20}$/, 'Debes poner una editorial valida'),
+
+        comments: yup.string()
+          .max(100, 'El comentario és demasiado largo'),
+
+        price: yup.number()
+          .required('Este campo es obligatorio')
+          .positive('El precio debe ser mayor que 0'),
+
+        pages: yup.number()
+          .required('Este campo es obligatorio')
+          .integer('Las paginas no pueden tener decimales')
+          .positive('El numero de paginas debe ser mayor que 0'),
+
+        status: yup.string()
+          .required('Este campo es obligatorio'),
+
+        module: yup.string()
+          .required('Este campo es obligatorio')
+          .notOneOf([''], 'Debes seleccionar un módulo'),
+      })
+    };
   },
   computed: {
     ...mapState(store, ['modules'])
@@ -35,30 +60,6 @@ export default {
     }
   },
   methods: {
-
-    validateLength(value) {
-      if (value <= 0) {
-        return "El valor debe ser mayor que 0"
-      }
-      return true
-    },
-
-    validateComment(value) {
-      if (value) {
-        if (value.length > 50) {
-          return 'El comentario no puede exceder los 500 caracteres';
-        }
-      }
-      return true;
-
-    },
-
-    validateEditorial(value) {
-      if (!/^[a-zA-ZÀ-ÿ\s]{2,20}$/.test(value)) {
-        return 'La editorial solo puede contener letras, mínimo 2 y máximo 20 caracteres';
-      }
-      return true;
-    },
 
     ...mapActions(store, ['addMessage', 'fetchModules', 'fetchBook', 'changeDBBook', 'fetchBooks', 'addDBBook']),
     fillForm(book) {
@@ -141,7 +142,7 @@ export default {
 
 <template>
   <div id="form">
-    <Form id="bookForm" @submit="handleSubmit">
+    <Form id="bookForm" :validation-schema="mySchema" @submit="handleSubmit">
       <legend>
         <h3 class="action">AñadirLibro</h3>
       </legend>
@@ -154,45 +155,50 @@ export default {
 
       <div>
         <label for="id-module">Módulo:</label>
-        <select id="id-module" required>
-          <option v-if="!id">- Selecciona un módulo -</option>
-          <modules-list v-for="module in modules" :module="module"></modules-list>
-        </select>
-        <span class='error'></span>
+        <Field name="module">
+          <select id="id-module" required>
+            <option v-if="!id" value="">- Selecciona un módulo -</option>
+            <modules-list v-for="module in modules" :module="module"></modules-list>
+          </select>
+        </Field>
+
+        <ErrorMessage name="module" />
       </div>
 
       <div>
         <label>Editorial</label>
-        <Field name="publisher" id="publisher" type="text" :rules="validateEditorial"></Field>
+        <Field name="publisher" id="publisher" type="text"></Field>
         <ErrorMessage name="publisher" />
       </div>
 
       <div>
         <label>Precio:</label>
-        <Field name="price" id="price" type="number" :rules="validateLength" />
+        <Field name="price" id="price" type="number" />
         <ErrorMessage name="price" />
       </div>
 
       <div>
         <label>Páginas:</label>
-        <Field name="pages" id="pages" type="number" :rules="validateLength" />
+        <Field name="pages" id="pages" type="number" />
         <ErrorMessage name="pages" />
       </div>
 
       <div>
         <label>Estado:</label>
-        <!-- Aquí poned un radiobutton para cada estado -->
-        <input type="radio" name="status" value="new" required>Nuevo
-        <input type="radio" name="status" value="good">Bueno
-        <input type="radio" name="status" value="used">Usado
-        <input type="radio" name="status" value="bad">Malo
-        <input type="radio" name="status" value="digital">Digital
-        <span class='error'></span>
+        <div>
+          <Field type="radio" name="status" value="new" /> Nuevo
+          <Field type="radio" name="status" value="good" /> Bueno
+          <Field type="radio" name="status" value="used" /> Usado
+          <Field type="radio" name="status" value="bad" /> Malo
+          <Field type="radio" name="status" value="digital" /> Digital
+        </div>
+        <ErrorMessage name="status" />
       </div>
+
 
       <div>
         <label>Comentarios:</label>
-        <Field name="comments" id="comments" type="text" :rules="validateComment" />
+        <Field name="comments" id="comments" type="text" />
         <ErrorMessage name="comments" />
       </div>
 
