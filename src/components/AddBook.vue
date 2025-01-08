@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       book: null,
+      userID: 1,
 
       mySchema: yup.object({
         publisher: yup.string()
@@ -39,7 +40,6 @@ export default {
           .required('Este campo es obligatorio'),
 
         module: yup.string()
-          .required('Este campo es obligatorio')
           .notOneOf([''], 'Debes seleccionar un módulo'),
       })
     };
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
 
-    ...mapActions(store, ['addMessage', 'fetchModules', 'fetchBook', 'changeDBBook', 'fetchBooks', 'addDBBook']),
+    ...mapActions(store, ['addMessage', 'fetchModules', 'fetchBook', 'changeDBBook', 'fetchBooks', 'addDBBook', 'getBooksByUser']),
     fillForm(book) {
       document.getElementById('book-id').value = book.id;
       document.getElementById('id-module').value = book.moduleCode;
@@ -73,13 +73,13 @@ export default {
     },
 
     async handleSubmit(event) {
-
       const moduleCode = document.getElementById('id-module').value;
       const publisher = document.getElementById('publisher').value;
       const price = parseFloat(document.getElementById('price').value);
       const pages = parseInt(document.getElementById('pages').value, 10);
       const status = document.querySelector('input[name="status"]:checked')?.value;
       const comments = document.getElementById('comments').value;
+
       if (this.book) {
         const id = document.getElementById('book-id').value;
         const newBook = {
@@ -89,32 +89,62 @@ export default {
           price: price,
           pages: pages,
           status: status,
-          comments: comments
+          comments: comments,
+          userID: this.userID
         };
-        const result = await this.changeDBBook(newBook)
-        this.addMessage('Libro editado correctamente')
-      } else {
+        try {
+
+          const userBooks = await this.getBooksByUser(this.userID);
+
+          const existe = userBooks?.some(book => book.moduleCode === moduleCode && book.id !== id);
+
+          if (existe) {
+            this.addMessage('El usuario ya tiene un libro asignado a este módulo.');
+          } else {
+            const result = await this.changeDBBook(newBook);
+            this.addMessage('Libro editado correctamente');
+          }
+        } catch (error) {
+          this.addMessage(`Error al editar el libro: ${error}`);
+        }
+      }
+      else {
         const newBook = {
           moduleCode: moduleCode,
           publisher: publisher,
           price: price,
           pages: pages,
           status: status,
-          comments: comments
+          comments: comments,
+          userID: this.userID
         };
 
         try {
-          const result = await this.addDBBook(newBook);
-          this.addMessage('Libro con añadido correctamente')
+
+          const userBooks = await this.getBooksByUser(this.userID);
+
+
+          const existe = userBooks?.some(book => book.moduleCode === moduleCode);
+
+          if (existe) {
+            this.addMessage('El usuario ya tiene un libro asignado a este módulo.');
+          } else {
+
+            const result = await this.addDBBook(newBook);
+            this.addMessage('Libro añadido correctamente');
+          }
         } catch (error) {
-          this.addMessage(error)
+          this.addMessage(`Error al añadir el libro: ${error}`);
         }
       }
+
+
       const form = document.getElementById('bookForm');
-      this.$router.push('/')
       form.reset();
-      this.fetchBooks()
+      this.$router.push('/');
+      this.fetchBooks();
     },
+
 
     vaciarFormulario(book) {
       document.querySelector('.id-camp').classList.add('id');

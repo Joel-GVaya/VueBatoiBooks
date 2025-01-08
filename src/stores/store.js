@@ -128,7 +128,17 @@ export const store = defineStore('messages',  {
                 this.addMessage('No se encontró el módulo con ese ID');
                 return null;
             }
+        },
+
+        async getBooksByUser(userID) {
+            try {
+                const response = await axios.get(`${API_URL}books?userID=${userID}`);
+                return response.data; 
+            } catch (error) {
+                this.addMessage(`Error al obtener los libros del usuario con ID ${userID}:`, error);
+            }
         }
+        
         
 
     }

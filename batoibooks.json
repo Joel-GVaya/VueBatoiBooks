@@ -2163,22 +2163,24 @@
       "comments": "ASfWEF"
     },
     {
-      "id": "b1dd",
-      "moduleCode": "5f8c",
-      "publisher": "dasda",
-      "price": 1231,
-      "pages": 424,
+      "id": "65ff",
+      "moduleCode": "6c68",
+      "publisher": "Bromera",
+      "price": 123,
+      "pages": 312,
       "status": "good",
-      "comments": "asdadw1qw"
+      "comments": "",
+      "userID": 1
     },
     {
-      "id": "00df",
-      "moduleCode": "5f8c",
-      "publisher": "JoelEdited",
-      "price": 12,
-      "pages": 23,
-      "status": "new",
-      "comments": "Prueba validacion Formulario"
+      "id": "7ed8",
+      "moduleCode": "42dd",
+      "publisher": "Bromera",
+      "price": 123,
+      "pages": 321,
+      "status": "good",
+      "comments": "",
+      "userID": 1
     }
   ]
 }
