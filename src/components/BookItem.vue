@@ -1,6 +1,5 @@
 <script>
 import { store } from '@/stores/store';
-import AddBook from './AddBook.vue';
 import { mapActions } from 'pinia';
 
 export default {
